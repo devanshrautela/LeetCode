@@ -1,34 +1,58 @@
 class Solution {
 public:
     int calculate(string s) {
-        stack <long long int> nums, ops;
-        long long int num = 0;
-        long long int rst = 0;
-        long long int sign = 1;
-        for (char c : s) { 
-            if (isdigit(c)) {
-                num = num * 10 + c - '0';
+        int n=s.size();
+        int sum=0;
+        int sign=1;
+        stack<int>st;
+        
+     
+     for(int i=0;i<n;i++)
+     {
+         //number
+         
+        if(s[i]>='0' && s[i]<='9')
+        {
+            
+            int num=0;
+            while(s.size()>i&&s[i]>='0' && s[i]<='9')
+                
+            {
+                num=num*10+(s[i]-'0');
+                i++;
             }
-            else {
-                rst += sign * num;
-                num = 0;
-                if (c == '+') 
-                    sign = 1;
-                if (c == '-') 
-                    sign = -1;
-                if (c == '(') {
-                    nums.push(rst);
-                    ops.push(sign);
-                    rst = 0;
-                    sign = 1;
-                }
-                if (c == ')' && ops.size()) {
-                    rst = ops.top() * rst + nums.top();
-                    ops.pop(); nums.pop();
-                }
-            }
+            sum+=num*sign;
+            i--;
         }
-        rst += sign * num;
-        return rst;
+         //'+'
+         else if(s[i]=='+')
+         {
+             sign=1;
+         }
+         // '-'
+         else if(s[i]=='-')
+         {
+             sign=-1;
+         }
+         // '('
+         else if(s[i]=='(')
+         {
+             st.push(sum);
+             st.push(sign);
+             sum=0;
+             sign=1;
+         }
+         
+         //')'
+         else if(s[i]==')')
+         {
+             sum=st.top()*sum;
+             st.pop();
+             sum+=st.top();
+             st.pop();
+         }
+     }
+        return sum;
+        
     }
 };
